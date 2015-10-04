@@ -1,0 +1,231 @@
+@-webkit-keyframes sk-cubemove {
+  25% { -webkit-transform: translateX(55px) rotate(-90deg) scale(0.5) }
+  50% { -webkit-transform: translateX(55px) translateY(55px) rotate(-180deg) }
+  75% { -webkit-transform: translateX(0px) translateY(55px) rotate(-270deg) scale(0.5) }
+  100% { -webkit-transform: rotate(-360deg) }
+}
+
+@keyframes sk-cubemove {
+  25% {
+    transform: translateX(55px) rotate(-90deg) scale(0.5);
+    -webkit-transform: translateX(55px) rotate(-90deg) scale(0.5);
+  }
+  50% {
+    transform: translateX(55px) translateY(55px) rotate(-179deg);
+    -webkit-transform: translateX(55px) translateY(55px) rotate(-179deg);
+  }
+  50.1% {
+    transform: translateX(55px) translateY(55px) rotate(-180deg);
+    -webkit-transform: translateX(55px) translateY(55px) rotate(-180deg);
+  }
+  75% {
+    transform: translateX(0px) translateY(55px) rotate(-270deg) scale(0.5);
+    -webkit-transform: translateX(0px) translateY(55px) rotate(-270deg) scale(0.5);
+  }
+  100% {
+    transform: rotate(-360deg);
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+a {
+  color: #FFF;
+  display: block;
+  font-weight: 300;
+  margin: 20px auto;
+  max-width: 950px;
+  text-decoration: none;
+  width: 100%;
+}
+
+.btn {
+  display: none;
+  margin: 50px auto;
+  max-width: 250px;
+}
+
+.container-data {
+  border-radius: 5px 0 0 5px;
+  color: #FFF;
+  float: left;
+  height: 100%;
+  max-width: 35%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.container-data-sub {
+  background-color: rgba(9, 31, 49, 0.7);
+  float: left;
+  height: 100%;
+  padding: 25px;
+  width: 100%;
+}
+
+.container-main {
+  max-width: 950px;
+  width: 100%;
+  height: 275px;
+  overflow: hidden;
+  margin: 0 auto 50px;
+}
+
+.container-tweets {
+  border-radius: 0 5px 5px 0;
+  background-color: #FFF;
+  color: #9C9C9C;
+  float: left;
+  padding: 25px;
+  max-width: 65%;
+  height: 100%;
+  width: 100%;
+}
+
+.container-tweets p {
+  margin: 0;
+}
+
+.cube1, .cube2 {
+  background-color: #21AEEC;
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-cubemove 2.5s infinite ease-in-out;
+  animation: sk-cubemove 2.5s infinite ease-in-out;
+}
+
+.cube2 {
+  -webkit-animation-delay: -1.25s;
+  animation-delay: -1.25s;
+}
+
+.data-description {
+  font-size: 10px;
+  color: #B9B9B9;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.data-loading p {
+  color: #B9B9B9;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.data-number {
+  float: left;
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1;
+  width: 50%;
+}
+
+.data-number p {
+  margin: 0;
+}
+
+.search-data {
+  display: none;
+}
+
+.search-title {
+  background-color: #0F3654;
+  font-size: 18px;
+  font-weight: 700;
+  overflow: hidden;
+  letter-spacing: 1px;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding: 10px 25px;
+}
+
+.spinner {
+  margin: 30px auto 0;
+  width: 70px;
+  height: 70px;
+  position: relative;
+}
+
+.tweets {
+  color: #9C9C9C;
+  max-height: 600px;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.tweets li {
+  clear: both;
+  border-bottom: solid 1px #E5E5E5;
+  overflow: hidden;
+  padding: 15px 0;
+  list-style-type: none;
+}
+
+.tweet-description {
+  width: 87%;
+  float: right;
+}
+
+.tweet-header {
+  line-height: 1;
+  border-bottom: solid 1px #E5E5E5;
+  color: #575757;
+  padding-bottom: 15px;
+}
+
+.tweet-image {
+  border-radius: 4px;
+  float: left;
+  margin-top: 5px;
+}
+
+.tweet-name {
+  font-weight: 700;
+  color: #21AEEC;
+}
+
+.tweet-text {
+  height: 45px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media only screen and (max-width : 768px) {
+  a.desktop {
+    display: none;
+  }
+
+  a.mobile {
+    display: block;
+  }
+
+  .container-data {
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  .container-main {
+    height: auto;
+  }
+
+  .container-tweets {
+    border-radius: 0;
+    max-width: 100%;
+    height: 285px;
+  }
+
+  .data-number {
+    text-align: center;
+  }
+
+  .tweet-description {
+    width: 80%;
+  }
+}

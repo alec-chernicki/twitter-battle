@@ -1,0 +1,53 @@
+extends ./layout
+block append head
+  link(rel='stylesheet', type='text/css', href='stylesheets/dashboard.css')
+
+block content
+  a.desktop(href='/') Back to Search
+  .container-main.one
+    .container-data
+      p.search-title= searchOne
+      .container-data-sub
+        .data-loading.one
+          .spinner
+            .cube1
+            .cube2
+          p WAITING FOR TWEETS
+        .search-data.one
+          canvas#chart-one(width="280px" height="100")
+          .data-number
+            p.data-percentage.one
+            span.data-description PERCENT OF TWEETS
+          .data-number
+            p.data-count.one
+            span.data-description NUMBER OF TWEETS
+    .container-tweets
+      p.tweet-header Real-time tweets:
+      ul.tweets.one
+
+  .container-main.two
+    .container-data
+      p.search-title= searchTwo
+      .container-data-sub
+        .data-loading.two
+          .spinner
+            .cube1
+            .cube2
+          p WAITING FOR TWEETS
+        .search-data.two
+          canvas#chart-two(width="280px" height="100px")
+          .data-number
+            p.data-percentage.two
+            span.data-description PERCENT OF TWEETS
+          .data-number
+            p.data-count.two
+            span.data-description NUMBER OF TWEETS
+    .container-tweets
+      p.tweet-header Real-time tweets:
+      ul.tweets.two
+  a.btn.btn-primary.mobile(href='/') Back to Search
+
+block append foot
+  script(src='/socket.io/socket.io.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/smoothie/1.27.0/smoothie.js')
+  script(src='javascripts/dashboard.js')

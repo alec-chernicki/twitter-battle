@@ -1,0 +1,144 @@
+body {
+  color: #FFF;
+  padding: 0 15px;
+  text-align: center;
+}
+
+form {
+  margin-top: 80px;
+}
+
+h1 {
+  font-size: 70px;
+  font-weight: 300;
+  line-height: 1.15;
+  margin: 130px 0 0 0;
+}
+
+input {
+  background: transparent;
+  border: 0;
+  border-bottom: solid 1px #21AEEC;
+  -webkit-border-radius:0;
+  border-radius:0;
+  color: #FFF;
+  font-family: "Open Sans";
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 60px;
+  margin: 0 auto;
+  outline: 0;
+  padding: 0 10px;
+  position: relative;
+  text-align: center;
+  transition: all 0.2s;
+  width: 300px;
+  z-index: 10;
+}
+
+input:focus {
+  width: 100%;
+}
+
+p {
+  color: #BCBCBC;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  font-weight: 300;
+  margin: 10px auto 0;
+  max-width: 375px;
+  width: 100%;
+}
+
+.btn {
+  margin: 80px auto 0;
+}
+
+.form-control {
+  display: inline-block;
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.form-error {
+  background: #21AEEC;
+  border-radius: 0 0 5px 5px;
+  bottom: -28px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  font-weight: 300;
+  left: 0;
+  margin: 0 auto;
+  max-width: 140px;
+  opacity: 0;
+  padding: 4px 10px 6px;
+  position: absolute;
+  right: 0;
+  transition: opacity 0.2s;
+}
+
+.form-error.show {
+  opacity: 1;
+}
+
+.form-label {
+  color: #BCBCBC;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: text;
+  font-size: 40px;
+  font-weight: 300;
+  left: 0;
+  line-height: 60px;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.form-label.hide {
+  visibility: hidden;
+}
+
+.versus {
+  display: inline-block;
+  font-size: 50px;
+  font-weight: 600;
+  margin: 0 50px;
+}
+
+@media only screen and (max-width : 768px) {
+  body {
+    background: url(images/dots.png) repeat 0 0, radial-gradient(circle farthest-corner at 50% -150%, #1A4F7B, #000B13);
+  }
+
+  form {
+    margin-top: 0;
+  }
+
+  input {
+    -webkit-appearance: none;
+  }
+
+  p {
+    margin: 10px auto 40px;
+  }
+
+  h1 {
+    margin: 30px 0 0 0;
+  }
+
+  .btn {
+    margin: 30px auto 80px;
+  }
+
+  .form-control {
+    margin-bottom: 30px;
+  }
+
+  .versus {
+    margin: 0 0 30px;
+    width: 100%;
+  }
+}
