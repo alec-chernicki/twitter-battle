@@ -1,7 +1,7 @@
 # twitter-battle
 Compare how two search terms compete against each other in real-time.
 
-**Demo: https://twitterbattle-alecortega.herokuapp.com/**
+**Fully Responsive Demo: https://twitterbattle-alecortega.herokuapp.com/**
 
 **Goals:** 
 - To gain a better understanding on Socket.io + Express
