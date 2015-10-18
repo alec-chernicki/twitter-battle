@@ -14,7 +14,7 @@ html, body {
 }
 
 body {
-  background: url(images/dots.png) repeat 0 0, radial-gradient(circle closest-corner at 50% -20%, #1A4F7B, #000B13);
+  background: url(../images/dots.png) repeat 0 0, radial-gradient(circle closest-corner at 50% -20%, #1A4F7B, #000B13);
   border-top: solid 8px #21AEEC;
   font-family: "Open Sans";
   min-width: 1000px;
