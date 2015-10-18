@@ -1,58 +1,57 @@
+var labelListOne = ['happy', 'Los Angeles', 'Apple', 'Red Sox'];
+var labelListTwo = ['sad', 'New York', 'Google', 'Yankees'];
+
 jQuery(function($) {
-  var labelListOne = ['happy', 'Los Angeles', 'Apple', 'Red Sox'];
-  var labelListTwo = ['sad', 'New York', 'Google', 'Yankees'];
-  var $searchLabelOne = $('.form-label.one');
-  var $searchInputOne = $('.search-one-input');
-  var $searchErrorOne = $('.form-error.one');
-  var $searchLabelTwo = $('.form-label.two');
-  var $searchInputTwo = $('.search-two-input');
-  var $searchErrorTwo = $('.form-error.two');
   var $landingForm = $('.search-form');
+  var $formErrors = $landingForm.find('.form-error');
+  var $formInputs = $landingForm.find('input');
+  var $searchLabelOne = $('.form-label.one');
+  var $searchLabelTwo = $('.form-label.two');
 
   // Validation
   $landingForm.submit(function(e) {
-    var searchOne = $searchInputOne.val().trim();
-    var searchTwo = $searchInputTwo.val().trim();
-    // TODO: Dry this up and make it pretty
-    if (searchOne === '') {
-      e.preventDefault();
-      $searchErrorTwo.removeClass('show');
-      $searchErrorOne.text('Invalid search term').addClass('show');
-    }
-    else if (searchTwo === '') {
-      e.preventDefault();
-      $searchErrorOne.removeClass('show');
-      $searchErrorTwo.text('Invalid search term').addClass('show');
-    }
-    else if (searchOne.toLowerCase() === searchTwo.toLowerCase()) {
-      e.preventDefault();
-      $searchErrorOne.text('Terms must differ').addClass('show');
-      $searchErrorTwo.text('Terms must differ').addClass('show');
-    }
+    var inputValues = [];
+
+    $.each($formInputs, function() {
+      var $el = $(this);
+      var value = $el.val().trim();
+
+      if (value === '') {
+        e.preventDefault();
+        $formErrors.removeClass('show');
+        $el.siblings('.form-error').text('Invalid search term').addClass('show');
+      }
+      inputValues.push(value);
+
+      if (inputValues[0] === inputValues[1]) {
+        e.preventDefault();
+        $formErrors.text('Terms must differ').addClass('show');
+      }
+    });
   });
 
-  // Animation
-  $('.form-control input').bind('checkVal', function() {
+  // Custom event handler
+  $(document).on('checkDisplayLabel', '.form-control input', function() {
     var $label = $(this).prev('span');
     if (this.value !== '' || this === document.activeElement) {
       $label.addClass('hide');
     } else {
       $label.removeClass('hide');
     }
-  }).on('focus blur input propertychange paste', function() {
-    $(this).trigger('checkVal');
   });
 
-  // TODO: DRY this up
-  !function fadeListOne(i) {
-    $searchLabelOne.text(labelListOne[i]).fadeIn(1000).delay(600).fadeOut(1000, function() {
-      fadeListOne((i + 1) % labelListOne.length);
-    });
-  }(0);
+  $(document).on('input focus blur', '.form-control input', function() {
+    $(this).trigger('checkDisplayLabel');
+  });
 
-  !function fadeListTwo(i) {
-    $searchLabelTwo.text(labelListTwo[i]).fadeIn(1000).delay(600).fadeOut(1000, function() {
-      fadeListTwo((i + 1) % labelListTwo.length);
-    });
-  }(0);
+  var fadeLabel = function(label, list) {
+    (function fade(i) {
+      label.text(list[i]).fadeIn(1000).delay(600).fadeOut(1000, function() {
+        fade((i + 1) % list.length);
+      });
+    })(0);
+  };
+
+  fadeLabel($searchLabelOne, labelListOne);
+  fadeLabel($searchLabelTwo, labelListTwo);
 });

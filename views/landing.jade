@@ -7,14 +7,14 @@ block content
   p Compare how two search terms compete against each other in real-time.
   form.search-form(action="/", method="POST")
     .form-control
-      span.form-error.one
+      span.form-error
       span.form-label.one happy
-      input.search-one-input(type='text', autocomplete="off", name='searchOne')
+      input(type='text', autocomplete="off", name='searchOne')
     span.versus VS
     .form-control
-      span.form-error.two
+      span.form-error
       span.form-label.two sad
-      input.search-two-input(type='text', autocomplete="off", name='searchTwo')
+      input(type='text', autocomplete="off", name='searchTwo')
     button.btn.btn-primary(type='submit', value='Submit') Battle
 
 block append foot

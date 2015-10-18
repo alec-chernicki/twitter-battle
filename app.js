@@ -2,8 +2,8 @@
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var path = require('path');
-    // TODO: MemoryStore isn't fit for prod, switch to Redis store, make sure compat w/ Socket.io
-var  session = require('express-session')({
+// TODO: MemoryStore isn't fit for prod, switch to Redis store, make sure compat w/ Socket.io
+var session = require('express-session')({
   secret: process.env.EXPRESS_SESSION_SECRET,
   resave: false,
   saveUninitialized: true
@@ -32,11 +32,10 @@ server.listen(app.get('port'));
 
 // Redis variables
 if (process.env.REDISTOGO_URL) {
-  var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+  var rtg = require("url").parse(process.env.REDISTOGO_URL);
   var redis = require("redis").createClient(rtg.port, rtg.hostname);
   redis.auth(rtg.auth.split(":")[1]);
-}
-else {
+} else {
   var redis = require("redis").createClient();
 }
 redis.on('connect', function() {
@@ -53,7 +52,7 @@ var twit = new Twitter({
 });
 
 // Define Objects
-var User = function(id){
+var User = function(id) {
   this.id = id;
   this.searchCountOne = 0;
   this.searchCountTwo = 0;
@@ -74,12 +73,12 @@ var TweetData = function(tweet, count, totalCount) {
   this.user = tweet.user.screen_name;
   this.text = tweet.text;
   this.userImage = tweet.user.profile_image_url;
-  this.searchCount =  count;
+  this.searchCount = count;
   this.searchPercentage = (count / totalCount) * 100;
 };
 
 // Helper Methods
-var deleteUser = function(id){
+var deleteUser = function(id) {
   redis.del(id, function(err, reply) {
     if (err) console.log(err);
   });
@@ -95,11 +94,12 @@ io.on('connection', function(socket) {
   var user = new User(socket.handshake.sessionID);
 
   redis.lrange(user.id, 0, 1, function(err, searchTerms) {
-    if (err || !searchTerms[0] || !searchTerms[1]) return;
-
+    if (err || searchTerms.length === 0) return;
     // TODO: This is creating a new stream on every new connection which is very bad.
     // Once my JavaScript skillz level up come back and refactor this out into a global var.
-    stream = twit.stream('statuses/filter', { track: searchTerms });
+    stream = twit.stream('statuses/filter', {
+      track: searchTerms
+    });
 
     stream.on('tweet', function(tweet) {
       var text = tweet.text.toLowerCase();
@@ -136,8 +136,7 @@ app.post('/', function(req, res) {
 
   if (!searchOne || !searchTwo) {
     res.redirect('/');
-  }
-  else {
+  } else {
     redis.rpush(req.sessionID, searchOne.toLowerCase(), searchTwo.toLowerCase(), function(err, reply) {
       res.redirect('/dashboard');
     });
@@ -147,13 +146,11 @@ app.post('/', function(req, res) {
 app.get('/dashboard', function(req, res) {
   redis.lrange(req.sessionID, 0, 1, function(err, searchTerms) {
     if (err || searchTerms.length === 0) {
-      res.redirect('/');
+      return res.redirect('/');
     }
-    else {
-      res.render('dashboard', {
-        searchOne: searchTerms[0].toUpperCase(),
-        searchTwo: searchTerms[1].toUpperCase()
-      });
-    }
+    res.render('dashboard', {
+      searchOne: searchTerms[0].toUpperCase(),
+      searchTwo: searchTerms[1].toUpperCase()
+    });
   });
 });

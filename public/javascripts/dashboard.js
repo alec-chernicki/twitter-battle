@@ -11,49 +11,32 @@ jQuery(function($) {
   var $searchTwoCount = $('.data-count.two');
 
   // Create real-time charts
-  var chartOne = new SmoothieChart({
-    millisPerPixel: 73,
-    grid: {
-      fillStyle: 'transparent',
-      strokeStyle: 'transparent',
-      verticalSections: 0,
-      borderVisible: false
-    },
-    labels: {
-      disabled: true
-    },
-    maxValue: 100,
-    minValue: 0
-  });
-  var chartOneLine = new TimeSeries();
-  chartOne.streamTo(document.getElementById("chart-one"), 200);
-  chartOne.addTimeSeries(chartOneLine, {
-    lineWidth: 1,
-    strokeStyle: '#1FBCF0',
-    fillStyle: 'rgba(33, 174, 236, 0.1)'
-  });
+  var Chart = function(id) {
+    this.chart = new SmoothieChart({
+      millisPerPixel: 73,
+      grid: {
+        fillStyle: 'transparent',
+        strokeStyle: 'transparent',
+        verticalSections: 0,
+        borderVisible: false
+      },
+      labels: {
+        disabled: true
+      },
+      maxValue: 100,
+      minValue: 0
+    });
+    this.chartLine = new TimeSeries();
+    this.chart.streamTo(document.getElementById(id), 200);
+    this.chart.addTimeSeries(this.chartLine, {
+      lineWidth: 1,
+      strokeStyle: '#1FBCF0',
+      fillStyle: 'rgba(33, 174, 236, 0.1)'
+    });
+  };
 
-  var chartTwo = new SmoothieChart({
-    millisPerPixel: 73,
-    grid: {
-      fillStyle: 'transparent',
-      strokeStyle: 'transparent',
-      verticalSections: 0,
-      borderVisible: false
-    },
-    labels: {
-      disabled: true
-    },
-    maxValue: 100,
-    minValue: 0
-  });
-  var chartTwoLine = new TimeSeries();
-  chartTwo.streamTo(document.getElementById("chart-two"), 200);
-  chartTwo.addTimeSeries(chartTwoLine, {
-    lineWidth: 1,
-    strokeStyle: '#1FBCF0',
-    fillStyle: 'rgba(33, 174, 236, 0.1)'
-  });
+  var chartOne = new Chart('chart-one');
+  var chartTwo = new Chart('chart-two');
 
   // Create Socket.io event handlers
   // TODO: Dry this up
@@ -64,7 +47,7 @@ jQuery(function($) {
     $searchOneCount.text(data.searchCount);
     $searchOneCounterPercentage.text(searchPercentage + '%');
     $searchTwoCounterPercentage.text((100 - searchPercentage).toFixed(1) + '%');
-    chartOneLine.append(new Date().getTime(), searchPercentage);
+    chartOne.chartLine.append(new Date().getTime(), searchPercentage);
 
     $tweetOneList.prepend('<li><img class="tweet-image" src="' + data.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.user + '</p><p class="tweet-text">' + data.text + '</p></li>');
     $('.tweets li:nth-child(3)').remove();
@@ -77,7 +60,7 @@ jQuery(function($) {
     $searchTwoCount.text(data.searchCount);
     $searchOneCounterPercentage.text((100 - searchPercentage).toFixed(1) + '%');
     $searchTwoCounterPercentage.text(searchPercentage + '%');
-    chartTwoLine.append(new Date().getTime(), searchPercentage);
+    chartTwo.chartLine.append(new Date().getTime(), searchPercentage);
 
     $tweetTwoList.prepend('<li><img class="tweet-image" src="' + data.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.user + '</p><p class="tweet-text">' + data.text + '</p></li>');
     $('.tweets li:nth-child(3)').remove();
