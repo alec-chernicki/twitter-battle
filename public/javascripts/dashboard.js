@@ -42,26 +42,24 @@ jQuery(function($) {
   socket.on('tweet one', function(data) {
     $('.data-loading.one').hide();
     $('.search-data.one').show();
-    var searchPercentage = data.searchPercentage.toFixed(1);
-    $searchOneCount.text(data.searchCount);
-    $searchOneCounterPercentage.text(searchPercentage + '%');
-    $searchTwoCounterPercentage.text((100 - searchPercentage).toFixed(1) + '%');
-    chartOne.chartLine.append(new Date().getTime(), searchPercentage);
+    $searchOneCount.text(data.user.searchCountOne);
+    $searchOneCounterPercentage.text(data.user.searchPercentageOne + '%');
+    $searchTwoCounterPercentage.text(data.user.searchPercentageTwo + '%');
+    chartOne.chartLine.append(new Date().getTime(), data.user.searchPercentageOne);
 
-    $tweetOneList.prepend('<li><img class="tweet-image" src="' + data.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.user + '</p><p class="tweet-text">' + data.text + '</p></li>');
+    $tweetOneList.prepend('<li><img class="tweet-image" src="' + data.tweet.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.tweet.user + '</p><p class="tweet-text">' + data.tweet.text + '</p></li>');
     $('.tweets li:nth-child(3)').remove();
   });
 
   socket.on('tweet two', function(data) {
     $('.data-loading.two').hide();
     $('.search-data.two').show();
-    var searchPercentage = data.searchPercentage.toFixed(1);
-    $searchTwoCount.text(data.searchCount);
-    $searchOneCounterPercentage.text((100 - searchPercentage).toFixed(1) + '%');
-    $searchTwoCounterPercentage.text(searchPercentage + '%');
-    chartTwo.chartLine.append(new Date().getTime(), searchPercentage);
+    $searchTwoCount.text(data.user.searchCountTwo);
+    $searchOneCounterPercentage.text(data.user.searchPercentageOne + '%');
+    $searchTwoCounterPercentage.text(data.user.searchPercentageTwo + '%');
+    chartTwo.chartLine.append(new Date().getTime(), data.user.searchPercentageTwo);
 
-    $tweetTwoList.prepend('<li><img class="tweet-image" src="' + data.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.user + '</p><p class="tweet-text">' + data.text + '</p></li>');
+    $tweetTwoList.prepend('<li><img class="tweet-image" src="' + data.tweet.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.tweet.user + '</p><p class="tweet-text">' + data.tweet.text + '</p></li>');
     $('.tweets li:nth-child(3)').remove();
   });
 });
