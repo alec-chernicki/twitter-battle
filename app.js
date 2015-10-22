@@ -43,17 +43,26 @@ redis.on('connect', function() {
 });
 
 // Twitter stream variables
-var Twitter = require('twit');
-var twit = new Twitter({
+var TwitterStreamChannels = require('twitter-stream-channels');
+var twit = new TwitterStreamChannels({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
   access_token: process.env.TWITTER_ACCESS_TOKEN,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
+var stream;
+redis.lrange('trackedKeywords', 0, -1, function(err, keywords) {
+  if (err) console.log(err);
+  var searches = !keywords ? keywords : ['foo'];
+  console.log('Stream searches:')
+  console.log(searches);
+  stream = twit.streamChannels({ track: searches }).stop();
+});
+console.log(stream);
+
 // Define Objects
 var User = function(id) {
-  this.id = id;
   this.searchCountOne = 0;
   this.searchCountTwo = 0;
   this.totalCount = 0;
@@ -78,10 +87,13 @@ var TweetData = function(tweet, count, totalCount) {
 };
 
 // Helper Methods
-var deleteUser = function(id) {
-  redis.del(id, function(err, reply) {
-    if (err) console.log(err);
-  });
+var deleteUser = function(searchOne, searchTwo) {
+  redis.multi()
+    .lrem('trackedKeywords', -1, searchOne)
+    .lrem('trackedKeywords', -1, searchTwo)
+    .exec(function(err, reply) {
+      if (err) console.log(err);
+    });
 };
 
 // Creates a new instance of Socket.io
@@ -90,28 +102,18 @@ var io = require('socket.io')(server);
 io.use(ioSession(session));
 
 io.on('connection', function(socket) {
-  var stream;
   var user = new User(socket.handshake.sessionID);
 
   redis.lrange(user.id, 0, 1, function(err, searchTerms) {
     if (err || searchTerms.length === 0) return;
-    // TODO: This is creating a new stream on every new connection which is very bad.
-    // Once my JavaScript skillz level up come back and refactor this out into a global var.
-    stream = twit.stream('statuses/filter', {
-      track: searchTerms
+
+    stream.on('keywords/' + searchTerms[0] , function(tweet) {
+      user.addTweetOne();
+      socket.volatile.emit('tweet one', new TweetData(tweet.text.toLowerCase(), user.searchCountOne, user.totalCount));
     });
-
-    stream.on('tweet', function(tweet) {
-      var text = tweet.text.toLowerCase();
-
-      if (text.indexOf(' ' + searchTerms[0]) !== -1) {
-        user.addTweetOne();
-        socket.volatile.emit('tweet one', new TweetData(tweet, user.searchCountOne, user.totalCount));
-      }
-      if (text.indexOf(' ' + searchTerms[1]) !== -1) {
-        user.addTweetTwo();
-        socket.volatile.emit('tweet two', new TweetData(tweet, user.searchCountTwo, user.totalCount));
-      }
+    stream.on('keywords/' + searchTerms[1] , function(tweet) {
+      user.addTweetTwo();
+      socket.volatile.emit('tweet two', new TweetData(tweet.text.toLowerCase(), user.searchCountTwo, user.totalCount));
     });
   });
 
@@ -137,9 +139,12 @@ app.post('/', function(req, res) {
   if (!searchOne || !searchTwo) {
     res.redirect('/');
   } else {
-    redis.rpush(req.sessionID, searchOne.toLowerCase(), searchTwo.toLowerCase(), function(err, reply) {
-      res.redirect('/dashboard');
-    });
+    redis.multi()
+      .rpush('trackedKeywords', searchOne, searchTwo)
+      .rpush(req.sessionID, searchOne, searchTwo)
+      .exec(function(err, reply) {
+        res.redirect('/dashboard');
+      });
   }
 });
 

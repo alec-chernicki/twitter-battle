@@ -1,6 +1,5 @@
 var socket = io();
 
-
 jQuery(function($) {
   // TODO: Add ID's to things being accessed by jQuery
   var $tweetOneList = $('.tweets.one');
