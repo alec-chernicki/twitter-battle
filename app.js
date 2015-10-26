@@ -13,6 +13,11 @@ var session = require('express-session')({
 var express = require('express');
 var app = express();
 
+var errorHandler = function (err, req, res, next) {
+  res.status(500);
+  res.render('error', { error: err });
+}
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -24,6 +29,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET));
 app.use(express.static(__dirname + '/public'));
 app.use(session);
+app.use(errorHandler)
 
 // Attaching express app to HTTP server
 var http = require('http');
