@@ -1,5 +1,7 @@
 var socket = io();
 
+mixpanel.track('Dashbord visited');
+
 jQuery(function($) {
   // TODO: Add ID's to things being accessed by jQuery
   var $tweetOneList = $('.tweets.one');
@@ -8,6 +10,10 @@ jQuery(function($) {
   var $searchTwoCounterPercentage = $('.data-percentage.two');
   var $searchOneCount = $('.data-count.one');
   var $searchTwoCount = $('.data-count.two');
+
+  $('a.mobile, a.desktop').on('click', function() {
+    mixpanel.track('Back to dashboard clicked');
+  });
 
   // Create real-time charts
   var Chart = function(id) {

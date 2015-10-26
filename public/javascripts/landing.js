@@ -8,6 +8,8 @@ jQuery(function($) {
   var $searchLabelOne = $('.form-label.one');
   var $searchLabelTwo = $('.form-label.two');
 
+  mixpanel.track('Landing visited');
+
   // Validation
   $landingForm.submit(function(e) {
     var inputValues = [];
@@ -27,6 +29,11 @@ jQuery(function($) {
         e.preventDefault();
         $formErrors.text('Terms must differ').addClass('show');
       }
+    });
+
+    mixpanel.track('Search terms submitted', {
+      searchOne: inputValues[0],
+      searchTwo: inputValues[1]
     });
   });
 

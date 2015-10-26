@@ -78,7 +78,6 @@ var TweetData = function(tweet, count, totalCount) {
   this.userImage = tweet.user.profile_image_url;
 };
 
-// Helper Methods
 var deleteUser = function(id) {
   redis.del(id, function(err, reply) {
     if (err) console.log(err);
@@ -112,10 +111,10 @@ io.on('connection', function(socket) {
     });
 
     socket.on('disconnect', function(socket) {
-      twit.untrack(searchTerms[0]);
-      twit.untrack(searchTerms[1]);
       // Set timeout to account for page refresh
       setTimeout(function() {
+        twit.untrack(searchTerms[0]);
+        twit.untrack(searchTerms[1]);
         deleteUser(user.id);
       }, 4000);
     });
@@ -129,8 +128,8 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-  var searchOne = req.body.searchOne;
-  var searchTwo = req.body.searchTwo;
+  var searchOne = req.body.searchOne.toLowerCase();
+  var searchTwo = req.body.searchTwo.toLowerCase();
   twit.track(searchOne);
   twit.track(searchTwo);
 
