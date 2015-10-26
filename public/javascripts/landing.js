@@ -24,17 +24,18 @@ jQuery(function($) {
         $el.siblings('.form-error').text('Invalid search term').addClass('show');
       }
       inputValues.push(value);
-
-      if (inputValues[0] === inputValues[1]) {
-        e.preventDefault();
-        $formErrors.text('Terms must differ').addClass('show');
-      }
     });
 
-    mixpanel.track('Search terms submitted', {
-      searchOne: inputValues[0],
-      searchTwo: inputValues[1]
-    });
+    if (inputValues[0] === inputValues[1]) {
+      e.preventDefault();
+      $formErrors.text('Terms must differ').addClass('show');
+    }
+    else if (!!inputValues[0] && !!inputValues[0]){
+      mixpanel.track('Search terms submitted', {
+        searchOne: inputValues[0],
+        searchTwo: inputValues[1]
+      });
+    }
   });
 
   // Custom event handler

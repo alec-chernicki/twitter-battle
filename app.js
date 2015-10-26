@@ -106,21 +106,23 @@ io.on('connection', function(socket) {
       var text = tweet.text.toLowerCase();
       var tweetData = new TweetData(tweet);
 
-      if (text.indexOf(' ' + searchTerms[0]) !== -1) {
+      if (text.indexOf(' ' + searchTerms[0]) > -1) {
         user.addTweetOne();
-        socket.volatile.emit('tweet one', { tweet: tweetData, user: user });
+        socket.emit('tweet one', { tweet: tweetData, user: user });
       }
-      if (text.indexOf(' ' + searchTerms[1]) !== -1) {
+      if (text.indexOf(' ' + searchTerms[1]) > -1) {
         user.addTweetTwo();
-        socket.volatile.emit('tweet two', { tweet: tweetData, user: user });
+        socket.emit('tweet two', { tweet: tweetData, user: user });
       }
     });
 
     socket.on('disconnect', function(socket) {
       // Set timeout to account for page refresh
       setTimeout(function() {
-        twit.untrack(searchTerms[0]);
-        twit.untrack(searchTerms[1]);
+        if (searchTerms.length !== 0) {
+          twit.untrack(searchTerms[0]);
+          twit.untrack(searchTerms[1]);
+        }
         deleteUser(user.id);
       }, 4000);
     });

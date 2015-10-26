@@ -50,7 +50,7 @@ jQuery(function($) {
     $('.search-data.one').show();
     $searchOneCount.text(data.user.searchCountOne);
     $searchOneCounterPercentage.text(data.user.searchPercentageOne + '%');
-    $searchTwoCounterPercentage.text(data.user.searchPercentageTwo + '%');
+    $searchTwoCounterPercentage.text((100 - data.user.searchPercentageOne).toFixed(1) + '%');
     chartOne.chartLine.append(new Date().getTime(), data.user.searchPercentageOne);
 
     $tweetOneList.prepend('<li><img class="tweet-image" src="' + data.tweet.userImage + '"><div class="tweet-description"><p class="tweet-name">' + data.tweet.user + '</p><p class="tweet-text">' + data.tweet.text + '</p></li>');
@@ -58,10 +58,11 @@ jQuery(function($) {
   });
 
   socket.on('tweet two', function(data) {
+    console.log('tweet two received');
     $('.data-loading.two').hide();
     $('.search-data.two').show();
     $searchTwoCount.text(data.user.searchCountTwo);
-    $searchOneCounterPercentage.text(data.user.searchPercentageOne + '%');
+    $searchOneCounterPercentage.text((100 - data.user.searchPercentageTwo).toFixed(1)+ '%');
     $searchTwoCounterPercentage.text(data.user.searchPercentageTwo + '%');
     chartTwo.chartLine.append(new Date().getTime(), data.user.searchPercentageTwo);
 
